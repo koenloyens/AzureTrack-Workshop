@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+[assembly: FunctionsStartup(typeof(RMotownFestival.Functions.Startup))]
 namespace RMotownFestival.Functions
 {
     public class Startup : FunctionsStartup

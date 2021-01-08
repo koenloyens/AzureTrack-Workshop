@@ -1,6 +1,8 @@
 ﻿using Azure.Storage.Blobs;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using RMotownFestival.Api.Common;
 using System.Linq;
 
 namespace RMotownFestival.Api.Controllers
@@ -10,6 +12,15 @@ namespace RMotownFestival.Api.Controllers
     public class PicturesController : ControllerBase
     {
 
+        public BlobUtility BlobUtility { get; }
+
+        private readonly IConfiguration Configuration;
+
+        public PicturesController(BlobUtility blobUtility, IConfiguration configuration)
+        {
+            BlobUtility = blobUtility;
+            Configuration = configuration;
+        }
 
         [HttpGet]
         public string[] GetAllPictureUrls()
@@ -22,10 +33,11 @@ namespace RMotownFestival.Api.Controllers
         }
 
 
-
         [HttpPost]
         public void PostPicture(IFormFile file)
         {
+            BlobContainerClient container = BlobUtility.GetThumbsContainer();
+            container.UploadBlob(file.FileName, file.OpenReadStream());
         }
     }
 }
